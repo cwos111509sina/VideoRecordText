@@ -147,17 +147,15 @@
     UIButton * button = (UIButton *)[self.view viewWithTag:100];
     
     if (button.selected) {
-        button.selected = NO;
-        [_captureMovieFileOutput stopRecording];
-
+        return;
     }
 
     NSFileManager* fileManager=[NSFileManager defaultManager];
     
     NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *createPath = [NSString stringWithFormat:@"%@/myVidio/%@", pathDocuments,_fileName];
+    NSString *createPath = [NSString stringWithFormat:@"%@/myVidio", pathDocuments];
     
-    // 判断文件夹是否存在，如果不存在，则创建
+    // 判断文件夹是否存在，如果存在，清空
     if ([[NSFileManager defaultManager] fileExistsAtPath:createPath]) {
         [fileManager removeItemAtPath:createPath error:nil];
     }
@@ -251,9 +249,9 @@
                 totalDuration = CMTimeAdd(totalDuration, asset.duration);
                 
                 videoComposition.frameDuration = CMTimeMake(1, 30);
-                videoComposition.renderSize = CGSizeMake(assetVideoTrack.naturalSize.height,assetVideoTrack.naturalSize.height*((WIDTH*744/720-30)/WIDTH));
-                //                NSLog(@"width = %f          %f",assetVideoTrack.naturalSize.width,assetVideoTrack.naturalSize.height);
-                
+                //视频输出尺寸
+                videoComposition.renderSize = CGSizeMake(assetVideoTrack.naturalSize.height,assetVideoTrack.naturalSize.height*(HEIGHT/(HEIGHT-140)));
+
                 
                 AVMutableVideoCompositionInstruction * avMutableVideoCompositionInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
                 
@@ -296,7 +294,6 @@
                         [self.view bringSubviewToFront:_playBcgV];
                         
                         _mediaV.contentURL = mergeFileURL;
-                        
                         
                         [_mediaV prepareToPlay];
                         [_mediaV play];
