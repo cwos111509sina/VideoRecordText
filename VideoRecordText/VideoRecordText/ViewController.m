@@ -70,9 +70,6 @@
     
     //初始化会话
     _captureSession=[[AVCaptureSession alloc]init];
-    if ([_captureSession canSetSessionPreset:AVAssetExportPresetMediumQuality]) {//设置分辨率
-        _captureSession.sessionPreset = AVAssetExportPresetMediumQuality;
-    }
     [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
         if (granted) {
         }else{
